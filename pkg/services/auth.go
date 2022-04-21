@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/heifetzwu/go-grpc-auth-svc/pkg/db"
@@ -63,6 +64,7 @@ func (s *Server) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResp
 }
 
 func (s *Server) Validate(ctx context.Context, req *pb.ValidateRequest) (*pb.ValidateResponse, error) {
+	fmt.Println("### 0: validate")
 	claims, err := s.Jwt.ValidateToken(req.Token)
 
 	if err != nil {
@@ -71,7 +73,7 @@ func (s *Server) Validate(ctx context.Context, req *pb.ValidateRequest) (*pb.Val
 			Error:  err.Error(),
 		}, nil
 	}
-
+	fmt.Println("### 1: claims=", claims)
 	var user models.User
 
 	if result := s.H.DB.Where(&models.User{Email: claims.Email}).First(&user); result.Error != nil {
