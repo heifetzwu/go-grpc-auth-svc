@@ -21,4 +21,8 @@ docker_stop:
 docker_rm:
 	docker rm $(shell docker ps -a -f name=${BINARY} -q)
 
-.PHONY: proto server engine docker docker_run docker_stop docker_rm
+docker_push_local:
+	docker tag 	${BINARY} docker.okidog.xyz/${BINARY}
+	docker push docker.okidog.xyz/${BINARY}
+
+.PHONY: proto server engine docker docker_run docker_stop docker_rm docker_push_local
